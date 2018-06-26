@@ -48,6 +48,8 @@ func main() {
 	sec.POST("/lv", gluster.CreateLVHandler)
 	sec.POST("/volume/grow", gluster.GrowVolumeHandler)
 	sec.POST("/lv/grow", gluster.GrowLVHandler)
+	sec.POST("/volume/delete", gluster.DeleteVolumeHandler)
+	sec.POST("/lv/delete", gluster.DeleteLVHandler)
 
 	log.Printf("Gluster api is running on: %v", gluster.Port)
 	r.Run(":" + strconv.Itoa(gluster.Port))

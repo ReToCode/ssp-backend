@@ -142,3 +142,49 @@ func CheckVolumeHandler(c *gin.Context) {
 		})
 	}
 }
+
+func DeleteVolumeHandler(c *gin.Context) {
+	var json models.DeleteVolumeCommand
+	if c.BindJSON(&json) == nil {
+		log.Printf("Got new request to delete LV. PvName: %v", json.PvName)
+
+		if err := deleteVolume(json.PvName); err != nil {
+			log.Print("Deleting LV failed", err.Error())
+
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": err.Error(),
+			})
+		} else {
+			log.Print("LV was deleted")
+
+			c.JSON(http.StatusOK, gin.H{
+				"message": "LV was deleted",
+			})
+		}
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"message": wrongAPIUsageError})
+	}
+}
+
+func DeleteLVHandler(c *gin.Context) {
+	var json models.DeleteVolumeCommand
+	if c.BindJSON(&json) == nil {
+		log.Printf("Got new request to delete LV. PvName: %v", json.PvName)
+
+		if err := deleteLvLocally(json.PvName); err != nil {
+			log.Print("Deleting LV failed", err.Error())
+
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": err.Error(),
+			})
+		} else {
+			log.Print("LV was deleted")
+
+			c.JSON(http.StatusOK, gin.H{
+				"message": "LV was deleted",
+			})
+		}
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"message": wrongAPIUsageError})
+	}
+}
